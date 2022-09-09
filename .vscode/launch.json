@@ -1,0 +1,58 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "2 Image Files (Horizontal)",
+            "type": "python",
+            "request": "launch",
+            "program": "ImageMerger.py",
+            "console": "integratedTerminal",
+            "args": [
+                "--image1-path", "test_files/butter.png",
+                "--image2-path", "test_files/chocolate.png",
+                "--final-path", "test_files/output/test_horizontal.png",
+                "--mode", "RGB",
+                "--fill-color", "rgb(255,255,255)",
+                "--optimize",
+                "--verbose"
+            ],
+            "justMyCode": true
+        },
+        {
+            "name": "2 Image Files (Vertical)",
+            "type": "python",
+            "request": "launch",
+            "program": "ImageMerger.py",
+            "console": "integratedTerminal",
+            "args": [
+                "--image1-path", "test_files/orange.png",
+                "--image2-path", "test_files/scarlet_red.png",
+                "--final-path", "test_files/output/test_vertical.png",
+                "--vertical",
+                "--mode", "RGB",
+                "--fill-color", "rgb(255,255,255)",
+                "--optimize",
+                "--verbose"
+            ],
+            "justMyCode": true
+        },
+        {
+            "name": "CSV File",
+            "type": "python",
+            "request": "launch",
+            "program": "ImageMerger.py",
+            "console": "integratedTerminal",
+            "args": [
+                "--image-list-path", "test_files/test_image_list.csv",
+                "--mode", "RGB",
+                "--fill-color", "#ffffff00",
+                "--optimize",
+                "--verbose"
+            ],
+            "justMyCode": true
+        }
+    ]
+}
