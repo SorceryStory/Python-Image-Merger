@@ -85,7 +85,6 @@ def main(argv):
         elif option_name == "--mode":
             mode = option_value
         elif option_name == "--fill-color":
-            print("COLOR", option_value)
             fill_color = ImageColor.getrgb(option_value)
         elif option_name == "--optimize":
             optimize = True

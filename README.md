@@ -13,7 +13,7 @@ There are two main ways to use this script. You can either merge 2 images or use
 ### Merging 2 Images
 
 ```console
-python ImageMerger.py --image1-path 'test_files/orange.png' --image2-path 'test_files/scarlet_red.png' --final-path 'test_files/output/test_vertical.png' --vertical --mode 'RGB' --fill-color 'rgb(255,255,255)' --optimize --verbose
+python ImageMerger.py --image1-path "test_files/orange.png" --image2-path "test_files/scarlet_red.png" --final-path "test_files/output/test_vertical.png" --vertical --mode "RGB" --fill-color "rgb(255,255,255)" --optimize --verbose
 ```
 
 - `--image1-path [str]`: The path to the first image, relative to the current running directory.
@@ -28,7 +28,7 @@ python ImageMerger.py --image1-path 'test_files/orange.png' --image2-path 'test_
 ### Using a CSV file
 
 ```console
-python ImageMerger.py --image-list-path 'test_files/test_image_list.csv' --vertical --mode 'RGB' --fill-color 'rgb(255,255,255)' --optimize --verbose
+python ImageMerger.py --image-list-path "test_files/test_image_list.csv" --vertical --mode "RGB" --fill-color "rgb(255,255,255)" --optimize --verbose
 ```
 
 - `--image-list-path [str]`: The path to the [.csv file](#csv-file-structure), relative to the current running directory.
