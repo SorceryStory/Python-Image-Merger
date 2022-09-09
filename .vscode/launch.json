@@ -5,52 +5,120 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "2 Image Files (Horizontal)",
+            "name": "2 Images (Default)",
             "type": "python",
             "request": "launch",
             "program": "ImageMerger.py",
             "console": "integratedTerminal",
             "args": [
-                "--image1-path", "test_files/butter.png",
-                "--image2-path", "test_files/chocolate.png",
-                "--final-path", "test_files/output/test_horizontal.png",
-                "--mode", "RGB",
-                "--fill-color", "rgb(255,255,255)",
-                "--optimize",
-                "--verbose"
+                "--merge-path=test_files/output/test_2_default.png",
+                "test_files/128/aluminium_dark.png",
+                "test_files/256/aluminium_light.png"
             ],
             "justMyCode": true
         },
         {
-            "name": "2 Image Files (Vertical)",
+            "name": "2 Images (Horizontal)",
             "type": "python",
             "request": "launch",
             "program": "ImageMerger.py",
             "console": "integratedTerminal",
             "args": [
-                "--image1-path", "test_files/orange.png",
-                "--image2-path", "test_files/scarlet_red.png",
-                "--final-path", "test_files/output/test_vertical.png",
-                "--vertical",
-                "--mode", "RGB",
-                "--fill-color", "rgb(255,255,255)",
+                "--orientation=h",
+                "--size=0",
+                "--mode=RGB",
+                "--fill-color=rgb(255,255,255)",
                 "--optimize",
-                "--verbose"
+                "--verbose",
+                "--merge-path=test_files/output/test_2_horizontal.png",
+                "test_files/256/butter.png",
+                "test_files/256/chameleon.png"
             ],
             "justMyCode": true
         },
         {
-            "name": "CSV File",
+            "name": "2 Images (Vertical)",
             "type": "python",
             "request": "launch",
             "program": "ImageMerger.py",
             "console": "integratedTerminal",
             "args": [
-                "--image-list-path", "test_files/test_image_list.csv",
-                "--mode", "RGB",
+                "--orientation=v",
+                "--size=0",
+                "--mode=RGB",
+                "--fill-color=rgb(255,255,255)",
+                "--optimize",
+                "--verbose",
+                "--merge-path=test_files/output/test_2_vertical.png",
+                "test_files/256/chocolate.png",
+                "test_files/256/orange.png"
+            ],
+            "justMyCode": true
+        },
+        {
+            "name": "3 Images (Horizontal)",
+            "type": "python",
+            "request": "launch",
+            "program": "ImageMerger.py",
+            "console": "integratedTerminal",
+            "args": [
+                "--orientation=h",
+                "--size=0",
+                "--mode=RGB",
+                "--fill-color=rgb(255,255,255)",
+                "--optimize",
+                "--verbose",
+                "--merge-path=test_files/output/test_3_horizontal.png",
+                "test_files/256/plum.png",
+                "test_files/128/scarlet_red.png",
+                "test_files/256/sky_blue.png"
+            ],
+            "justMyCode": true
+        },
+        {
+            "name": "4 Images (Vertical 2)",
+            "type": "python",
+            "request": "launch",
+            "program": "ImageMerger.py",
+            "console": "integratedTerminal",
+            "args": [
+                "--orientation=v",
+                "--size=2",
+                "--mode=RGB",
+                "--fill-color=rgb(255,255,255)",
+                "--optimize",
+                "--verbose",
+                "--merge-path=test_files/output/test_4_vertical_2.png",
+                "test_files/256/chocolate.png",
+                "test_files/256/butter.png",
+                "test_files/256/orange.png",
+                "test_files/256/scarlet_red.png"
+            ],
+            "justMyCode": true
+        },
+        {
+            "name": "9 Images (Horizontal 3)",
+            "type": "python",
+            "request": "launch",
+            "program": "ImageMerger.py",
+            "console": "integratedTerminal",
+            "args": [
+                "--orientation=h",
+                "--size=3",
+                "--mode", "RGBA",
                 "--fill-color", "#ffffff00",
                 "--optimize",
-                "--verbose"
+                "--verbose",
+                "--merge-path", "test_files/output/test_9_horizontal_3.png",
+                "test_files/256/aluminium_dark.png",
+                "test_files/128/aluminium_light.png",
+                "test_files/256/butter.png",
+                "test_files/128/chameleon.png",
+                "test_files/256/chocolate.png",
+                "test_files/128/orange.png",
+                "test_files/256/plum.png",
+                "test_files/128/scarlet_red.png",
+                "test_files/256/sky_blue.png"
             ],
             "justMyCode": true
         }

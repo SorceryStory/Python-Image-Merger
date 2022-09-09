@@ -6,42 +6,92 @@ import sys
 from PIL import Image, ImageColor
 
 
-def merge_images(image1_path: str, image2_path: str, horizontal: bool, mode: str, fill_color: tuple):
+def merge_images(orientation: str, size: int, mode: str, fill_color: tuple, image_paths: list[str]) -> tuple[Image.Image, bool]:
     try:
-        image1 = Image.open(image1_path)
-        image2 = Image.open(image2_path)
+        images = []
 
-        if horizontal:
-            finalWidth = image1.width + image2.width
-            finalHeight = max(image1.height, image2.height)
-        else:
-            finalWidth = max(image1.width, image2.width)
-            finalHeight = image1.height + image2.height
+        final_width = 0
+        final_height = 0
+
+        current_width = 0
+        current_height = 0
+
+        current_size = 0
+
+        for image_path in image_paths:
+            image = Image.open(image_path)
+            images.append(image)
+
+            if size == 0 or current_size < size:
+                current_size += 1
+            else:
+                final_width = max(final_width, current_width)
+                final_height = max(final_height, current_height)
+
+                current_width = 0
+                current_height = 0
+
+                current_size = 1
+
+            if orientation == "v":
+                current_width = max(current_width, final_width + image.width)
+                current_height += image.height
+            else:
+                current_width += image.width
+                current_height = max(
+                    current_height, final_height + image.height)
+
+        final_width = max(final_width, current_width)
+        final_height = max(final_height, current_height)
 
         mergedImage = Image.new(mode=mode, size=(
-            finalWidth, finalHeight), color=fill_color)
+            final_width, final_height), color=fill_color)
 
-        if horizontal:
-            mergedImage.paste(image1, (0, 0))
-            mergedImage.paste(image2, (image1.width, 0))
-        else:
-            mergedImage.paste(image1, (0, 0))
-            mergedImage.paste(image2, (0, image1.height))
+        current_size = 0
+
+        current_primary_pixel = 0
+        current_secondary_pixel = 0
+        next_secondary_pixel = 0
+
+        for image in images:
+            if size == 0 or current_size < size:
+                current_size += 1
+            else:
+                current_size = 1
+
+                current_primary_pixel = 0
+                current_secondary_pixel = next_secondary_pixel
+                next_secondary_pixel = 0
+
+            if orientation == "v":
+                mergedImage.paste(
+                    image, (current_secondary_pixel, current_primary_pixel))
+
+                current_primary_pixel += image.height
+                next_secondary_pixel = max(
+                    next_secondary_pixel, current_secondary_pixel + image.width)
+            else:
+                mergedImage.paste(
+                    image, (current_primary_pixel, current_secondary_pixel))
+
+                current_primary_pixel += image.width
+                next_secondary_pixel = max(
+                    next_secondary_pixel, current_secondary_pixel + image.height)
 
         return mergedImage, True
     except:
         return None, False
 
 
-def merge_and_save(image1_path: str, image2_path: str, horizontal: bool, mode: str, fill_color: tuple, final_path: str, optimize: bool):
+def merge_and_save(orientation: str, size: int, mode: str, fill_color: tuple, optimize: bool, quality: int, merge_path: str, image_paths: list[str]) -> tuple[Image.Image, bool]:
     try:
-        finalImage, success = merge_images(image1_path=image1_path, image2_path=image2_path,
-                                           horizontal=horizontal, mode=mode, fill_color=fill_color)
+        finalImage, success = merge_images(
+            orientation=orientation, size=size, mode=mode, fill_color=fill_color, image_paths=image_paths)
         if success:
-            dirname = os.path.dirname(final_path)
+            dirname = os.path.dirname(merge_path)
             if len(dirname) > 0:
                 os.makedirs(dirname, exist_ok=True)
-            finalImage.save(fp=final_path, optimize=optimize)
+            finalImage.save(optimize=optimize, quality=quality, fp=merge_path)
             return finalImage, True
         else:
             return None, False
@@ -49,83 +99,77 @@ def merge_and_save(image1_path: str, image2_path: str, horizontal: bool, mode: s
         return None, False
 
 
-def print_merge_message(image1_path: str, image2_path: str, final_path: str, success: bool):
-    print("Merge", image1_path, "with", image2_path, "into",
-          final_path, "SUCCESS" if success else "FAILURE")
-
-
 def main(argv):
-    image_list_path = ""
-
-    image1_path = ""
-    image2_path = ""
-    final_path = ""
-
-    horizontal = True
+    orientation = "h"
+    size = 0
     mode = "RGBA"
-    fill_color = (255, 255, 255, 255)
-    optimize = False
+    fill_color = "#00000000"
+    optimize = True
+    quality = 75
 
     verbose = False
 
-    option_values, _ = getopt.getopt(args=argv, shortopts="", longopts=[
-                                     "image-list-path=", "image1-path=", "image2-path=", "final-path=", "vertical", "mode=", "fill-color=", "optimize", "verbose"])
+    merge_path = "merge.png"
+
+    option_values, image_paths = getopt.getopt(args=argv, shortopts="", longopts=[
+                                               "orientation=", "size=", "mode=", "fill-color=", "optimize=", "quality=", "verbose", "merge-path="])
 
     for option_name, option_value in option_values:
-        if option_name == "--image-list-path":
-            image_list_path = option_value
-        elif option_name == "--image1-path":
-            image1_path = option_value
-        elif option_name == "--image2-path":
-            image2_path = option_value
-        elif option_name == "--final-path":
-            final_path = option_value
-        elif option_name == "--vertical":
-            horizontal = False
+        if option_name == "--orientation":
+            try:
+                if option_value[0].lower() == "v":
+                    orientation = "v"
+            except:
+                pass
+
+        elif option_name == "--size":
+            try:
+                size = int(option_value)
+            except:
+                pass
+
         elif option_name == "--mode":
             mode = option_value
+
         elif option_name == "--fill-color":
             fill_color = ImageColor.getrgb(option_value)
+
         elif option_name == "--optimize":
-            optimize = True
+            try:
+                if option_value[0].lower() in ["f", "n"]:
+                    optimize = False
+            except:
+                pass
+
+        elif option_name == "--quality":
+            try:
+                quality = int(option_value)
+            except:
+                pass
+
         elif option_name == "--verbose":
             verbose = True
 
+        elif option_name == "--merge-path":
+            merge_path = option_value
+
     if verbose:
         print("--- Merge Arguments ---")
-        if len(image_list_path) > 0:
-            print("image_list_path:", image_list_path)
-        else:
-            print("    image1_path:", image1_path)
-            print("    image2_path:", image2_path)
-            print("     final_path:", final_path)
-        print("     horizontal:", horizontal)
-        print("           mode:", mode)
-        print("     fill_color:", fill_color)
-        print("       optimize:", optimize)
+        print("orientation:", orientation)
+        print("       size:", size)
+        print("       mode:", mode)
+        print(" fill_color:", fill_color)
+        print("   optimize:", optimize)
+        print("    quality:", quality)
+        print(" merge_path:", merge_path)
+        print("image_paths:", image_paths)
         print("-----------------------")
 
-    if len(image_list_path) > 0:
-        try:
-            with open(image_list_path, newline='') as csv_file:
-                csv_reader = csv.reader(
-                    csv_file, delimiter=',', escapechar="\\")
-                for row in csv_reader:
-                    _, success = merge_and_save(image1_path=row[0], image2_path=row[1], horizontal=horizontal,
-                                                mode=mode, fill_color=fill_color, final_path=row[2], optimize=optimize)
+    _, success = merge_and_save(orientation=orientation, size=size, mode=mode, fill_color=fill_color,
+                                optimize=optimize, quality=quality, merge_path=merge_path, image_paths=image_paths)
 
-                    print_merge_message(
-                        image1_path=row[0], image2_path=row[1], final_path=row[2], success=success)
-
-        except FileNotFoundError:
-            print("Could not process", image_list_path, ": File Not Found")
-
-    else:
-        _, success = merge_and_save(image1_path=image1_path, image2_path=image2_path, horizontal=horizontal,
-                                    mode=mode, fill_color=fill_color, final_path=final_path, optimize=optimize)
-
-        print_merge_message(image1_path=image1_path, image2_path=image2_path,
-                            final_path=final_path, success=success)
+    print("Merge", image_paths, "into", merge_path,
+          "SUCCESS ✓" if success else "FAILURE ✗")
 
 
 if __name__ == "__main__":
