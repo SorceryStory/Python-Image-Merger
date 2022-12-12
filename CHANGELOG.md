@@ -1,5 +1,16 @@
 # Changelog
 
+## [2.0.1] - 2022-09-10
+
+### Added
+
+### Changed
+
+- Changed the symbols outputed on the sucess and failure console messages.
+- Updated README.md.
+
+### Removed
+
 ## [2.0.0] - 2022-09-09
 
 ### Added

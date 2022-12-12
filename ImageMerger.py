@@ -169,7 +169,7 @@ def main(argv):
                                 optimize=optimize, quality=quality, merge_path=merge_path, image_paths=image_paths)
 
     print("Merge", image_paths, "into", merge_path,
-          "SUCCESS ✓" if success else "FAILURE ✗")
+          "SUCCESS ☑" if success else "FAILURE ☒")
 
 
 if __name__ == "__main__":

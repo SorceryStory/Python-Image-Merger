@@ -19,7 +19,7 @@ python ImageMerger.py "--orientation=v" "--size=2" "--mode=RGB" "--fill-color=rg
 - `--optimize=[str]`: A string defining if you want the final image to have [optimized encoder settings](https://pillow.readthedocs.io/en/stable/handbook/image-file-formats.html#png) (`t` / `y`) or not (`f` / `n`). You can place any text here, but it will only check the first letter to mach either `t`, `y`, `f`, or `n`, ignoring capitalization. If the first letter doesn't match either option, it will fall back to the default. Default is to optimize (`t` / `y`).
 - `--quality=[int]`: An int defining the level of quality of the final image, ranging from `0` (worst) to `100` (best). Will only work on certain types of images, such as JPEG and TIFF. Default is `75`.
 - `--verbose`: Include if you want the program to output to the console the value of all setup variables.
-- `--final-path=[str]`: The path where to store the final merged image, relative to the current running directory. If no value is provided, it will output the merge to `merge.png` at the current working directory.
+- `--merge-path=[str]`: The path where to store the final merged image, relative to the current running directory. If no value is provided, it will output the merge to `merge.png` at the current working directory.
 
 Every image path (relative to the current running directory) listed after these arguments will add the corresponding image in that order to the final image.
 
